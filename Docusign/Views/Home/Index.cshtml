@@ -1,0 +1,23 @@
+﻿@model User
+
+<h2>Registration - First Page</h2>
+
+<div>
+
+    @using (Html.BeginForm("Register", "Registration", FormMethod.Post))
+    {
+        <div>
+            @Html.LabelFor(m => m.FirstName)
+            @Html.TextBoxFor(m => m.FirstName)
+        </div>
+        <div>
+            @Html.LabelFor(m => m.LastName)
+            @Html.TextBoxFor(m => m.LastName)
+        </div>
+        <ul>
+            <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+            <li>Excepteur sint occaecat cupidatat non proident nt occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</li>
+        </ul>
+        <button type="submit">Continue to Signature</button>
+    }
+</div>

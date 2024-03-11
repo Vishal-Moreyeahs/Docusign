@@ -1,0 +1,13 @@
+﻿@model Signature
+
+<h2>Registration - Second Page</h2>
+
+@using (Html.BeginForm("Download", "Home", FormMethod.Post))
+{
+    <div>
+        @* @Html.LabelFor(m => m.SignatureData)
+        @Html.TextBoxFor(m => m.SignatureData) *@
+        <iframe src="@Model.SignatureData" width="1000" height="1000" frameborder="0" scrolling="auto"></iframe>
+    </div>
+    <button type="submit">Complete Registration</button>
+}

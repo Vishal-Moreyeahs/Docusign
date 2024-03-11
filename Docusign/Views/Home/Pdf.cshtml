@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agreement Signature</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 200vh;
+        background-color: #f0f0f0;
+    }
+    .container {
+        text-align: center;
+        max-width: 800px;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        background-color: #fff;
+    }
+
+    .sign{
+            color: white;
+    }
+    .heading {
+        font-size: 22px;
+        color: #007bff;
+        border: 2px solid black;
+        border-radius: 20px;
+        padding: 10px 20px;
+        margin-bottom: 20px;
+        display: inline-block;
+    }
+    .input-group {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+    input[type="text"] {
+        width: calc(50% - 5px);
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+    ul {
+        text-align: left;
+        margin-left: 0;
+        padding-left: 0;
+    }
+    li {
+        list-style-type: none;
+        margin-bottom: 10px;
+    }
+    button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="heading">Agreement Signature</div>
+    <form>
+        <div>
+                <h5>First Name : @Model.FirstName</h5>
+                <h5>Last Name : @Model.LastName</h5>
+        </div>
+    </form>
+    <ul>
+        <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+        <li>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</li>
+        <li>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</li>
+        <li>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</li>
+    </ul>
+
+    <div>
+            <h3 style="margin-top:3em;">Agreed and Signature: <span class="sign" style=\"color:white;\">**signature_1**/</span></h3>
+    </div>
+</div>
+</body>
+</html>
