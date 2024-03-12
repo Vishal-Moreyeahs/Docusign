@@ -1,13 +1,54 @@
 ﻿@model Signature
+@{
+    // Retrieve status (true/false) from your model or controller
+    bool status = ViewBag.Status; // Assuming status is passed from the controller
+}
 
 <h2>Registration - Second Page</h2>
 
-@using (Html.BeginForm("Download", "Home", FormMethod.Post))
-{
+
     <div>
-        @* @Html.LabelFor(m => m.SignatureData)
-        @Html.TextBoxFor(m => m.SignatureData) *@
-        <iframe src="@Model.SignatureData" width="1000" height="1000" frameborder="0" scrolling="auto"></iframe>
+        <h4>Please sign Document from here : </h4>
+        <a href="@Model.SignatureData" target="_blank"><div style="background-color : #99ccff; margin:20px"> Sign From Here</div></a>
     </div>
-    <button type="submit">Complete Registration</button>
-}
+    <div style="background-color : #99ccff; margin-top :200px; border-radius: 2px solid blue">
+        <button type="submit" id="checkButton">Check</button>
+    </div>
+    @if (!status)
+    {
+        <p style="color:red">Please sign document First</p>
+    }
+
+
+<button id="completeRegistrationButton" disabled>Complete Registration</button>
+
+<script>
+    // Function to handle button enable/disable and alert message
+    function handleRegistration(status) {
+        var completeRegistrationButton = document.getElementById('completeRegistrationButton');
+        if (status) {
+            completeRegistrationButton.disabled = false;
+        } else {
+            completeRegistrationButton.disabled = true;
+            alert("Please sign document first.");
+        }
+    }
+
+    // Add click event listener to the check button
+    document.getElementById('checkButton').addEventListener('click', function (event) {
+        // Prevent the default form submission behavior
+        event.preventDefault();
+
+        // Make an AJAX request to the Check method in the controller
+        fetch('/Home/InitialCheck')
+            .then(response => response.json())
+            .then(data => {
+                // Extract status from the response data
+                var status = data;
+
+                // Handle the registration based on the status
+                handleRegistration(status);
+            })
+            .catch(error => console.error('Error:', error));
+    });
+</script>

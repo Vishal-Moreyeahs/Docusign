@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Docusign")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9cdb7ff4724c5265650989193e7f312194261987")]
 [assembly: System.Reflection.AssemblyProductAttribute("Docusign")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Docusign")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

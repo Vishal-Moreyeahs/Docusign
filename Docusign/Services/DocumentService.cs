@@ -93,7 +93,7 @@ namespace Docusign.Services
             }
             catch (Exception ex)
             {
-                throw new ApplicationException("AN error occured :");
+                throw new ApplicationException("An error occured :");
             }
         }
 

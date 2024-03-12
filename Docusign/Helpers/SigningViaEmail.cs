@@ -9,7 +9,7 @@ namespace Docusign.Helpers
     public static class SigningViaEmail
     {
         public static dynamic SendEnvelopeViaEmail(byte[] pdfDoc,string signerEmail, string signerName, string ccEmail, string ccName, string accessToken, 
-                                                        string basePath, string accountId, string docPdf, string envStatus)
+                                                        string basePath , string accountId, string docPdf, string envStatus)
         {
             //ds-snippet-start:eSign2Step3
             EnvelopeDefinition env = MakeEnvelope(signerEmail, signerName, ccEmail, ccName, docPdf, envStatus, pdfDoc);
@@ -23,8 +23,7 @@ namespace Docusign.Helpers
             ViewUrl results1 = envelopesApi.CreateRecipientView(accountId, results.EnvelopeId, viewRequest);
             var url = results1.Url;
 
-            return new { EnvelopeId = results.EnvelopeId, SignedUrl = url };
-        
+            return new { EnvelopeId = results.EnvelopeId, SignedUrl = url, EnvelopesApiData = envelopesApi };
         }
 
         public static RecipientViewRequest MakeRecipientViewRequest(string signerEmail, string signerName,

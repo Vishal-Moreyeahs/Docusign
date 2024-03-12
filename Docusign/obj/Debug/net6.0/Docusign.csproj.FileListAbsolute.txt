@@ -468,3 +468,4 @@ C:\Users\user\Downloads\Docusign\Docusign\Docusign\bin\Debug\net6.0\refs\System.
 C:\Users\user\Downloads\Docusign\Docusign\Docusign\bin\Debug\net6.0\refs\System.Xml.XPath.dll
 C:\Users\user\Downloads\Docusign\Docusign\Docusign\bin\Debug\net6.0\refs\System.Xml.XPath.XDocument.dll
 C:\Users\user\Downloads\Docusign\Docusign\Docusign\bin\Debug\net6.0\refs\WindowsBase.dll
+C:\Users\user\Downloads\Docusign\Docusign\Docusign\obj\Debug\net6.0\Docusign.sourcelink.json
