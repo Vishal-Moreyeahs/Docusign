@@ -19,7 +19,7 @@ namespace Docusign.Helpers
             EnvelopesApi envelopesApi = new EnvelopesApi(docuSignClient);
             EnvelopeSummary results = envelopesApi.CreateEnvelope(accountId, env);
 
-            var viewRequest = MakeRecipientViewRequest(signerEmail, signerName, "http://localhost");
+            var viewRequest = MakeRecipientViewRequest(signerEmail, signerName, "https://localhost:7269/Home/SecondPage");
             ViewUrl results1 = envelopesApi.CreateRecipientView(accountId, results.EnvelopeId, viewRequest);
             var url = results1.Url;
 
