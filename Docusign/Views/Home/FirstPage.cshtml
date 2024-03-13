@@ -1,23 +1,94 @@
 ﻿@model User
 
-<h2>Registration - First Registration Page</h2>
-
-<div>
-
-    @using (Html.BeginForm("Register", "Home", FormMethod.Post))
-    {
-        <div>
-            @Html.LabelFor(m => m.FirstName)
-            @Html.TextBoxFor(m => m.FirstName)
-        </div>
-        <div>
-            @Html.LabelFor(m => m.LastName)
-            @Html.TextBoxFor(m => m.LastName)
-        </div>
-        <ul>
-            <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
-            <li>Excepteur sint occaecat cupidatat non proident nt occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</li>
-        </ul>
-        <button type="submit">Continue to Signature</button>
+<style>
+    .heading {
+        font-size: 22px;
+        color: #007bff;
+        border: 2px solid black;
+        border-radius: 20px;
+        padding: 10px 20px;
+        margin-bottom: 20px;
+        display: inline-block;
     }
+
+    button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .input {
+        width: calc(50% - 5px);
+        padding: 10px;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    .container {
+        text-align: center;
+        max-width: 1200px;
+        padding: 20px;
+        height : 100%;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        background-color: #fff;
+    }
+
+    ul {
+        text-align: left;
+        margin-left: 0;
+        padding-left: 0;
+    }
+
+    li {
+        list-style-type: none;
+        margin-bottom: 10px;
+    }
+
+    .input {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 6px;
+    }
+    /*
+
+    .sign {
+        color: white;
+    }
+
+    
+
+    .input-group {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+    */
+</style>
+
+<div class="container">
+
+    <div class="heading">Agreement Signature</div>
+    <div>
+
+        @using (Html.BeginForm("Register", "Home", FormMethod.Post))
+        {
+            <div class="input">
+                @Html.LabelFor(m => m.FirstName)
+                @Html.TextBoxFor(m => m.FirstName)
+            </div>
+            <div class="input">
+                @Html.LabelFor(m => m.LastName)
+                @Html.TextBoxFor(m => m.LastName)
+            </div>
+            <ul>
+                <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+                <li>Excepteur sint occaecat cupidatat non proident nt occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</li>
+            </ul>
+            <button type="submit">Continue to Signature</button>
+        }
+    </div>
 </div>

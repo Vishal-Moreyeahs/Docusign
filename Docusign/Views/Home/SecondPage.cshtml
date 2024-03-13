@@ -1,35 +1,68 @@
 ﻿@model Signature
-@{
-    // Retrieve status (true/false) from your model or controller
-    bool status = ViewBag.Status;
-    var image = ViewBag.Image;// Assuming status is passed from the controller
-}
 
 <h2>Registration - Second Page</h2>
+<style>
+
+     button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+    .container {
+        text-align: center;
+        max-width: 1200px;
+        padding: 20px;
+        height: 100%;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        background-color: #fff;
+    }
+
+        input {
+        width: calc(20% - 5px);
+        padding: 10px;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+    .margin
+    {
+        margin : 20px;
+        padding : 10px;
+    }
+
+    .img{
+        padding: 10px 20px;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+</style>
 
 
-    <div>
-        <h4>Please sign Document from here : </h4>
-        <a href="@Model.SignatureData"><div style="background-color : #99ccff; margin:20px"> Sign From Here</div></a>
+<div class="container">
+    <div class="margin">
+        <h4>Please sign Document from Link Below : </h4>
+        <a href="@Model.SignatureData"><button>Sign Here</button></a>
     </div>
 
-    <img id="showImage" src="#" alt="Alternate Text" />
+    <div class="margin img" id="sign">
+        <img id="showImage" src="#" alt="Need to Sign first for View Signature" width="320px" height="100px" />
+    </div>
 
-    <div style="background-color : #99ccff; margin-top :20px; border-radius: 2px solid blue">
+    <div class="margin">
         <button type="submit" id="checkButton">Check</button>
     </div>
 
-    @if (!status)
-    {
-        <p style="color:red">Please sign document First</p>
-    }
 
     @using (Html.BeginForm("Check", "Home", FormMethod.Post))
     {
         <input type="submit" id="completeRegistrationButton" value="Download File" disabled/>
     }
-@* <button id="completeRegistrationButton" disabled>Complete Registration</button> *@
-
+</div>
 
 <script>
     // Function to handle button enable/disable and alert message
@@ -53,6 +86,11 @@
         console.log("data : ", data)
         
         var temp = document.getElementById('showImage');
+        var temp2 = document.getElementById('sign');
+        temp2.style.border = "1px solid black"; // Set border to 1px solid black
+        temp2.style.textAlign = "center";
+        temp2.style.marginLeft = "300px";
+        temp2.style.marginRight = "300px";
         temp.src = data;
     }
 
