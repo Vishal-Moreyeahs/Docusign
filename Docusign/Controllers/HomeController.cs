@@ -20,6 +20,10 @@ using Account = DocuSign.eSign.Client.Auth.OAuth.UserInfo.Account;
 using Newtonsoft.Json;
 using DocuSign.Admin.Client;
 using Org.BouncyCastle.Ocsp;
+using Microsoft.AspNetCore.Hosting.Server;
+using System.Net.Http.Headers;
+using System.Reflection.PortableExecutable;
+using iText.Kernel.Pdf.Action;
 
 namespace Docusign.Controllers
 {
@@ -116,56 +120,6 @@ namespace Docusign.Controllers
             return View(sign);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> SignAsync(Signature signature)
-        {
-            // Retrieve user data from TempData (You may need to change this based on your actual data storage)
-            var firstName = TempData.Peek("FirstName").ToString();
-            var lastName = TempData["LastName"].ToString();
-
-            //Authentication Process
-            var clientId = "e03c8ec1-c28c-4029-98d6-a534d7d062cc";
-            var impersonateId = "84213e37-5ba9-458d-8b30-c6d85118a794";
-            var authServer = "account-d.docusign.com";
-            var privateKeyFile  = Path.Combine(Directory.GetCurrentDirectory() +"\\"+ "private.key");
-            var accessToken = AuthenticationService.AuthenticateWithJwt("ESignature", clientId, impersonateId,
-                                                        authServer, DsHelper.ReadFileContent(privateKeyFile));
-
-            //AAuthentication Process
-
-            //Authorization Process
-            var docuSignClient = new DocuSign.eSign.Client.DocuSignClient();
-            docuSignClient.SetOAuthBasePath(authServer);
-            DocuSign.eSign.Client.Auth.OAuth.UserInfo userInfo = docuSignClient.GetUserInfo(accessToken.access_token);
-            Account acct = userInfo.Accounts.FirstOrDefault();
-            //Authorization Process
-
-            //Temp
-            var htmlContent = "";
-            using (var reader = new StreamReader(@"Views/Home/" + "Pdf.cshtml"))
-            {
-                htmlContent = await reader.ReadToEndAsync();
-            }
-            var user = new User
-            {
-                FirstName = firstName,
-                LastName = lastName
-            };
-
-            var html = _documentService.PopulateHtmlWithDynamicValues(htmlContent,user);
-            var pdfBytes = _documentService.ConvertHtmlToPdf(html);
-            //Temp
-            var envelopeId = SigningViaEmail.SendEnvelopeViaEmail(pdfBytes,"vishal.pawar5898@gmail.com", firstName, "vishal.pawar5898@gmail.com", lastName, accessToken.access_token, acct.BaseUri + "/restapi", acct.AccountId, "", "sent");
-            TempData["Url"] = envelopeId.SignedUrl;
-            ViewBag.Status = true;
-
-            // Call your DocuSign service to complete registraation with the signature
-            // Assuming you have a service to handle DocuSign integration
-
-            // After successful registration, you may redirect to a thank you page or perform any other actions
-            return RedirectToAction("Check");
-        }
-
         public async Task<IActionResult> Check()
         {
             var envelopeId = TempData.Peek("EnvelopeId").ToString();
@@ -173,20 +127,32 @@ namespace Docusign.Controllers
             var baseUri = TempData.Peek("BaseUri").ToString();
             var accessToken = TempData.Peek("AccessToken").ToString();
 
-            var requestUrl = $"https://demo.docusign.net/restapi/v2.1/accounts/{accountId}/envelopes/{envelopeId}";
-            var data = await _client.Get(requestUrl, accessToken, "application/json", "" );
-            string responseData = await data.Content.ReadAsStringAsync();
-            var response = JsonConvert.DeserializeObject<Envelope>(responseData);
-
-            if (response.Status == "sent")
+            var documentRequest = $"https://demo.docusign.net/restapi/v2.1/accounts/{accountId}/envelopes/{envelopeId}/documents";
+            var documents = await _client.Get(documentRequest, accessToken, "application/json", "");
+            string responseData = await documents.Content.ReadAsStringAsync();
+            var response = JsonConvert.DeserializeObject<EnvelopeDocumentsResult>(responseData);
+            var doc = response.EnvelopeDocuments.FirstOrDefault();
+            var pdfLink = $"https://demo.docusign.net/restapi/v2.1/accounts/{accountId}{doc.Uri}";
+            var pdfResponseData = await _client.Get(pdfLink,accessToken, "application/pdf", "");
+            //var responsePdfData = await pdfResponseData.Content.ReadAsStringAsync();
+            Stream pdfStream = await pdfResponseData.Content.ReadAsStreamAsync();
+            // Save the stream to a file
+            //string filePath = Path.Combine(Directory.GetCurrentDirectory(), "Pdfs" ,"Envelope1.pdf"); // Path where you want to save the PDF file
+            //using (FileStream fileStream = System.IO.File.Create(filePath))
+            //{
+            //    await pdfStream.CopyToAsync(fileStream);
+            //}
+            // Set content disposition header
+            var cd = new System.Net.Mime.ContentDisposition
             {
-                ViewBag.ErrorMessage = "The envelope has already been sent.";
-                return View();
-            }
+                FileName = "envelope-document.pdf",
+                Inline = false // false = prompt the user for downloading; true = inline display
+            };
+            Response.Headers.Add("Content-Disposition", cd.ToString());
 
-            var combinedPdf = new MemoryStream();
-            return File(combinedPdf.ToArray(), "application/pdf", $"Envelope_{envelopeId}.pdf");
+            return File(pdfStream, "application/pdf");
         }
+
         public async Task<bool> InitialCheck()
         {
             var envelopeId = TempData.Peek("EnvelopeId").ToString();
@@ -203,9 +169,34 @@ namespace Docusign.Controllers
             {
                 return false;
             }
-            else {
+            else 
+            {
                 return true;
             }
+
+        }
+
+        public async Task<string> ShowImageAsync()
+        {
+            var envelopeId = TempData.Peek("EnvelopeId").ToString();
+            var accountId = "f9c7a179-50f9-4c0d-84e1-3bf060b19999";
+            var baseUri = TempData.Peek("BaseUri").ToString();
+            var accessToken = TempData.Peek("AccessToken").ToString();
+
+            var requestUrl = $"https://demo.docusign.net/restapi/v2.1/accounts/{accountId}/envelopes/{envelopeId}/recipients/1/signature_image";
+            var signatureResponseData = await _client.Get(requestUrl, accessToken, "application/pdf", "");
+            //var responsePdfData = await pdfResponseData.Content.ReadAsStringAsync();
+            byte[] imageByte;
+            Stream signatureImage = await signatureResponseData.Content.ReadAsStreamAsync();
+            using (MemoryStream ms = new MemoryStream())
+            {
+                signatureImage.CopyTo(ms);
+                imageByte = ms.ToArray();
+            }
+            string imreBase64Data = Convert.ToBase64String(imageByte);
+            string imgDataURL = string.Format("data:image/png;base64,{0}", imreBase64Data);
+            //Passing image data in viewbag to view
+            return  imgDataURL.ToString();
         }
 
         public IActionResult ThankYou()

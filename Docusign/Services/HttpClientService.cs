@@ -22,7 +22,7 @@ namespace Docusign.Services
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", headers);
 
                 // Set the content type header
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(contentType));
                 try
                 { 
                 HttpResponseMessage response = await client.GetAsync(requestUrl);

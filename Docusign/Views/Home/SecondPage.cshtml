@@ -1,7 +1,8 @@
 ﻿@model Signature
 @{
     // Retrieve status (true/false) from your model or controller
-    bool status = ViewBag.Status; // Assuming status is passed from the controller
+    bool status = ViewBag.Status;
+    var image = ViewBag.Image;// Assuming status is passed from the controller
 }
 
 <h2>Registration - Second Page</h2>
@@ -9,29 +10,50 @@
 
     <div>
         <h4>Please sign Document from here : </h4>
-        <a href="@Model.SignatureData" target="_blank"><div style="background-color : #99ccff; margin:20px"> Sign From Here</div></a>
+        <a href="@Model.SignatureData"><div style="background-color : #99ccff; margin:20px"> Sign From Here</div></a>
     </div>
-    <div style="background-color : #99ccff; margin-top :200px; border-radius: 2px solid blue">
+
+    <img id="showImage" src="#" alt="Alternate Text" />
+
+    <div style="background-color : #99ccff; margin-top :20px; border-radius: 2px solid blue">
         <button type="submit" id="checkButton">Check</button>
     </div>
+
     @if (!status)
     {
         <p style="color:red">Please sign document First</p>
     }
 
+    @using (Html.BeginForm("Check", "Home", FormMethod.Post))
+    {
+        <input type="submit" id="completeRegistrationButton" value="Download File" disabled/>
+    }
+@* <button id="completeRegistrationButton" disabled>Complete Registration</button> *@
 
-<button id="completeRegistrationButton" disabled>Complete Registration</button>
 
 <script>
     // Function to handle button enable/disable and alert message
     function handleRegistration(status) {
         var completeRegistrationButton = document.getElementById('completeRegistrationButton');
         if (status) {
+            viewImageUrl();
             completeRegistrationButton.disabled = false;
-        } else {
+        } 
+        else 
+        {
             completeRegistrationButton.disabled = true;
             alert("Please sign document first.");
         }
+    }
+
+    async function viewImageUrl() {
+        const response = await fetch('/Home/ShowImage');
+        console.log("response : ",response)
+        const data = await response.text();
+        console.log("data : ", data)
+        
+        var temp = document.getElementById('showImage');
+        temp.src = data;
     }
 
     // Add click event listener to the check button
@@ -51,4 +73,24 @@
             })
             .catch(error => console.error('Error:', error));
     });
+
+    // Add click event listener to the check button
+    // document.getElementById('completeRegistrationButton').addEventListener('click', function (event) {
+    //     // Prevent the default form submission behavior
+    //     event.preventDefault();
+
+    //     // Make an AJAX request to the Check method in the controller
+    //     fetch('/Home/Check')
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             // Extract status from the response data
+    //             var status = data;
+    //             window.location.href = '@Url.Action("DownloadPdf", "File")';
+    //             // Handle the registration based on the status
+    //             // handleRegistration(status);
+    //         })
+    //         .catch(error => console.error('Error:', error));
+    // });
+
+
 </script>
